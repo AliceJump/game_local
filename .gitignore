@@ -1,0 +1,64 @@
+# .gitignore — 为 CBJQ_local 项目定制
+
+# --- 常见 OS / 编辑器 ---
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+*.suo
+*.user
+*.userprefs
+
+# --- 压缩包 / 安装器 / 临时归档 ---
+*.7z
+*.7z.*
+*.zip
+*.rar
+*.exe
+*.msi
+!**/inject.exe
+
+# --- 大二进制/补丁/游戏包 ---
+CBJQ/
+MikuSB-win-x64/
+MikuSB-win-x64
+# .pak 文件纳入版本控制
+
+# --- 引擎 / 二进制 / 构建产物 ---
+**/Binaries/
+**/Build/
+**/Intermediate/
+
+# --- 游戏存档、缓存、日志（用户数据） ---
+**/Saved/
+**/SaveGames/
+**/Logs/
+**/webcache/
+**/PersistentDownloadDir/
+**/deviceid.kxy
+
+# --- ReShade / shaders 缓存（保留源码/着色器可跟踪） ---
+reshade/reshade-shaders/Shaders/*Cache*
+reshade/reshade-shaders/Shaders/*Compiled*
+reshade/ReShade.ini.bak
+
+# --- 编程语言 / 环境 ---
+__pycache__/
+*.py[cod]
+.env
+.venv/
+venv/
+node_modules/
+
+# --- 日志与临时文件 ---
+*.log
+*.tmp
+*.bak
+
+# --- 保留需要跟踪的项目关键文件（如果误匹配） ---
+!CBJQ/manifest.json
+!CBJQ/localization.txt
+!CBJQ/version.cfg
+
+# 如果你使用 Git LFS，请在此处添加指向 LFS 的规则（例如大文件扩展名）
