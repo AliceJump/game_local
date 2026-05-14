@@ -1,7 +1,7 @@
 {
   "optional": {
     "localization": "auto",
-    "reshade": "auto"
+    "reshade": "off"
   },
   "launch": {
     "featureLevel": "ES31",

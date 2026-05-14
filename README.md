@@ -1,8 +1,10 @@
 # 使用方式
 
 ## 游戏外部操作
+> 提示：可以直接下载本仓库源包（Source code zip）后解压使用。  
+
 1. 移动游戏本体到本文件夹 `CBJQ` 中。  
-2. 按需编辑 `config.json`（`optional.localization` / `optional.reshade` 支持 `auto/on/off`）。  
+2. 按需编辑 `config.json`（`optional.localization` / `optional.reshade` 支持 `auto/on/off`，其中 `reshade` 默认 `off`）。  
 3. 点击 `点我.bat`。  
 4. `AntiHarmonyPatch` 自行添加到 `CBJQ\game\Game\Content\Paks` 中。  
 

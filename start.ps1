@@ -111,7 +111,7 @@ $gmPatchSource = Join-Path $gmPatchDir "Patch_GM-Windows_100_P.pak"
 $localizationEnabled = $false
 $reshadeEnabled = $false
 $localizationMode = "auto"
-$reshadeMode = "auto"
+$reshadeMode = "off"
 
 # ==================================================
 # 配置
