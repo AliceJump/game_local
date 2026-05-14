@@ -129,7 +129,7 @@ if (Test-Path $configFile) {
         $config = Get-Content -Path $configFile -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop
     }
     catch {
-        Fail "配置文件读取失败：$configFile"
+        Fail "配置文件读取失败：$configFile - $($_.Exception.Message)"
     }
 
     if ($null -ne $config.optional) {
@@ -488,6 +488,8 @@ else {
 
 Write-Host "=== Game ==="
 
+$windowStyle = if ($hideGameWindow) { "Hidden" } else { "Normal" }
+
 Start-Process `
     -FilePath $gameExe `
     -WorkingDirectory (Split-Path $gameExe) `
@@ -497,7 +499,7 @@ Start-Process `
         "-userdir=`"$userDir`""
         "-gclid=$gameGclid"
     ) `
-    -WindowStyle $(if ($hideGameWindow) { "Hidden" } else { "Normal" })
+    -WindowStyle $windowStyle
 
 Write-Host "Game OK"
 
