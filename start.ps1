@@ -110,6 +110,60 @@ $gmPatchSource = Join-Path $gmPatchDir "Patch_GM-Windows_100_P.pak"
 
 $localizationEnabled = $false
 $reshadeEnabled = $false
+$localizationMode = "auto"
+$reshadeMode = "off"
+
+# ==================================================
+# 配置
+# ==================================================
+
+$configFile = Join-Path $rootDir "config.json"
+
+$gameFeatureLevel = "ES31"
+$gameChannelId = "jinshan"
+$gameGclid = "CBJQ_setup"
+$hideGameWindow = $true
+
+if (Test-Path $configFile) {
+    try {
+        $config = Get-Content -Path $configFile -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop
+    }
+    catch {
+        Fail "配置文件读取失败：$configFile - $($_.Exception.Message)"
+    }
+
+    if ($null -ne $config.optional) {
+        if ($null -ne $config.optional.localization) {
+            $localizationMode = $config.optional.localization.ToString().ToLower()
+        }
+        if ($null -ne $config.optional.reshade) {
+            $reshadeMode = $config.optional.reshade.ToString().ToLower()
+        }
+    }
+
+    if ($null -ne $config.launch) {
+        if ($null -ne $config.launch.featureLevel) {
+            $gameFeatureLevel = $config.launch.featureLevel.ToString()
+        }
+        if ($null -ne $config.launch.channelId) {
+            $gameChannelId = $config.launch.channelId.ToString()
+        }
+        if ($null -ne $config.launch.gclid) {
+            $gameGclid = $config.launch.gclid.ToString()
+        }
+        if ($null -ne $config.launch.hideGameWindow) {
+            $hideGameWindow = [bool]$config.launch.hideGameWindow
+        }
+    }
+}
+
+if (@("auto", "on", "off") -notcontains $localizationMode) {
+    Fail "配置项 optional.localization 仅支持 auto/on/off，当前值：$localizationMode"
+}
+
+if (@("auto", "on", "off") -notcontains $reshadeMode) {
+    Fail "配置项 optional.reshade 仅支持 auto/on/off，当前值：$reshadeMode"
+}
 
 # ==================================================
 # ReShade
@@ -171,29 +225,56 @@ Write-Host "必要项检查完成，开始检查可选项..."
 $localizationFile = Join-Path $cbjqDir "localization.txt"
 $localizationValue = $null
 
-if (!(Test-Path $localizationFile)) {
-    Write-Host "localization.txt 不存在，跳过 localization 分支"
+if ($localizationMode -eq "off") {
+    Write-Host "配置关闭 localization，跳过 localization 分支"
 }
 else {
-    try {
-        $localizationValue = (Get-Content -Path $localizationFile -ErrorAction Stop | Select-Object -First 1).Trim()
-    }
-    catch {
-        Write-Host "读取 localization.txt 失败，跳过 localization 分支：$localizationFile"
-    }
-
-    if ($localizationValue -match '^localization\s*=\s*1$') {
-        $localizationEnabled = $true
-        Write-Host "localization=1，启用 localization 分支"
+    if (!(Test-Path $localizationFile)) {
+        if ($localizationMode -eq "on") {
+            try {
+                Set-Content -Path $localizationFile -Value "localization = 1" -Encoding ASCII
+                $localizationEnabled = $true
+                Write-Host "localization.txt 不存在，已按配置创建并设置为 1"
+            }
+            catch {
+                Fail "配置要求启用 localization，但创建 localization.txt 失败：$localizationFile"
+            }
+        }
+        else {
+            Write-Host "localization.txt 不存在，跳过 localization 分支"
+        }
     }
     else {
         try {
-            Set-Content -Path $localizationFile -Value "localization = 1" -Encoding ASCII
-            $localizationEnabled = $true
-            Write-Host "localization 已修正为 1"
+            $localizationValue = (Get-Content -Path $localizationFile -ErrorAction Stop | Select-Object -First 1).Trim()
         }
         catch {
-            Write-Host "localization 修正失败，跳过 localization 分支：$localizationFile"
+            if ($localizationMode -eq "on") {
+                Fail "配置要求启用 localization，但读取 localization.txt 失败：$localizationFile"
+            }
+            else {
+                Write-Host "读取 localization.txt 失败，跳过 localization 分支：$localizationFile"
+            }
+        }
+
+        if ($localizationValue -match '^localization\s*=\s*1$') {
+            $localizationEnabled = $true
+            Write-Host "localization=1，启用 localization 分支"
+        }
+        elseif ($null -ne $localizationValue) {
+            try {
+                Set-Content -Path $localizationFile -Value "localization = 1" -Encoding ASCII
+                $localizationEnabled = $true
+                Write-Host "localization 已修正为 1"
+            }
+            catch {
+                if ($localizationMode -eq "on") {
+                    Fail "配置要求启用 localization，但修正 localization 失败：$localizationFile"
+                }
+                else {
+                    Write-Host "localization 修正失败，跳过 localization 分支：$localizationFile"
+                }
+            }
         }
     }
 }
@@ -248,7 +329,10 @@ Sync-PakFiles `
 
 Write-Host "=== ReShade 检查 ==="
 
-if ((Test-Path $reshadeRoot) -and (Test-Path $reshadeShaders) -and (Test-Path $injectExe)) {
+if ($reshadeMode -eq "off") {
+    Write-Host "配置关闭 ReShade，跳过 ReShade 分支"
+}
+elseif ((Test-Path $reshadeRoot) -and (Test-Path $reshadeShaders) -and (Test-Path $injectExe)) {
 
     $reshadeReady = $true
 
@@ -345,7 +429,12 @@ if ((Test-Path $reshadeRoot) -and (Test-Path $reshadeShaders) -and (Test-Path $i
     }
 }
 else {
-    Write-Host "ReShade 相关文件缺失，跳过 ReShade 分支"
+    if ($reshadeMode -eq "on") {
+        Fail "配置要求启用 ReShade，但 ReShade 相关文件缺失"
+    }
+    else {
+        Write-Host "ReShade 相关文件缺失，跳过 ReShade 分支"
+    }
 }
 
 # ==================================================
@@ -368,6 +457,7 @@ Write-Host ""
 Write-Host "=== 检查汇总完成 ==="
 Write-Host "必要项全部通过，准备进入启动阶段"
 Write-Host "可选项状态：localization=$localizationEnabled, ReShade=$reshadeEnabled"
+Write-Host "可选项配置：localizationMode=$localizationMode, reshadeMode=$reshadeMode"
 Write-Host "必要项状态：MikuSB=ready"
 Write-Host ""
 
@@ -398,16 +488,18 @@ else {
 
 Write-Host "=== Game ==="
 
+$windowStyle = if ($hideGameWindow) { "Hidden" } else { "Normal" }
+
 Start-Process `
     -FilePath $gameExe `
     -WorkingDirectory (Split-Path $gameExe) `
     -ArgumentList @(
-        "-FeatureLevelES31"
-        "-ChannelID=jinshan"
+        "-FeatureLevel$gameFeatureLevel"
+        "-ChannelID=$gameChannelId"
         "-userdir=`"$userDir`""
-        "-gclid=CBJQ_setup"
+        "-gclid=$gameGclid"
     ) `
-    -WindowStyle Hidden
+    -WindowStyle $windowStyle
 
 Write-Host "Game OK"
 
