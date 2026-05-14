@@ -1,7 +1,8 @@
 游戏外部操作
 1.移动游戏本体到本文件夹CBJQ中
-2.点击"点我.bat"
-3.AntiHarmonyPatch 自行添加到(CBJQ\game\Game\Content\Paks中)
+2.按需编辑 config.json（optional.localization / optional.reshade 支持 auto/on/off）
+3.点击"点我.bat"
+4.AntiHarmonyPatch 自行添加到(CBJQ\game\Game\Content\Paks中)
 
 游戏内部操作
 1.先叉掉登录弹窗

@@ -1,0 +1,12 @@
+{
+  "optional": {
+    "localization": "auto",
+    "reshade": "auto"
+  },
+  "launch": {
+    "featureLevel": "ES31",
+    "channelId": "jinshan",
+    "gclid": "CBJQ_setup",
+    "hideGameWindow": true
+  }
+}
