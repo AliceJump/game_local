@@ -15,7 +15,7 @@ function Fail($msg) {
 # ==================================================
 
 $rootDir = $PSScriptRoot
-$cbjqDir  = Join-Path $rootDir "CBJQ"
+$cbjqDir  = Join-Path $rootDir "GameBin"
 $gameRoot = Join-Path $cbjqDir "game"
 
 # ==================================================

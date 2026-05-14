@@ -20,7 +20,7 @@ desktop.ini
 !**/inject.exe
 
 # --- 大二进制/补丁/游戏包 ---
-CBJQ/
+GameBin/
 MikuSB-win-x64/
 MikuSB-win-x64
 # .pak 文件纳入版本控制
