@@ -13,14 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+          uses: actions/checkout@v4
+          with:
+            lfs: true
+            fetch-depth: 0
 
-      - name: Build zip package (exclude reshade)
+      - name: Build zip package (exclude reshade, git metadata)
         env:
           ASSET_NAME: game_local-${{ github.ref_name }}-no-reshade.zip
         run: |
           ASSET_PATH="/tmp/${ASSET_NAME}"
-          zip -r "${ASSET_PATH}" . -x "reshade/**" ".git/**" ".github/**" ".gitignore" ".gitattributes"
+          # Exclude repo metadata and reshade directory; ensure patterns match files
+          zip -r "${ASSET_PATH}" . -x "./.git/*" "./.github/*" "reshade/*" ".gitignore" ".gitattributes"
           echo "ASSET_PATH=${ASSET_PATH}" >> "${GITHUB_ENV}"
 
       - name: Upload asset to release
