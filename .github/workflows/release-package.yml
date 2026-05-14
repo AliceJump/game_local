@@ -19,7 +19,7 @@ jobs:
           ASSET_NAME: game_local-${{ github.ref_name }}-no-reshade.zip
         run: |
           ASSET_PATH="/tmp/${ASSET_NAME}"
-          zip -r "${ASSET_PATH}" . -x "reshade/**" ".git/**"
+          zip -r "${ASSET_PATH}" . -x "reshade/**" ".git/**" ".github/**" ".gitignore" ".gitattributes"
           echo "ASSET_PATH=${ASSET_PATH}" >> "${GITHUB_ENV}"
 
       - name: Upload asset to release
