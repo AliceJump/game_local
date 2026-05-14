@@ -2,6 +2,7 @@
 
 ## 游戏外部操作
 > 提示：可以直接下载本仓库源包（Source code zip）后解压使用。  
+> 提示：Release 自动打包文件不包含 `reshade` 目录；如需 ReShade，请下载源包。  
 
 1. 移动游戏本体到本文件夹 `CBJQ` 中。  
 2. 按需编辑 `config.json`（`optional.localization` / `optional.reshade` 支持 `auto/on/off`，其中 `reshade` 默认 `off`）。  
