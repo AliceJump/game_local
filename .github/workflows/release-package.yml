@@ -3,7 +3,7 @@ name: Release Package (No ReShade)
 on:
   push:
     tags:
-      - 'pushtag'
+      - 'v*'
 
 permissions:
   contents: write

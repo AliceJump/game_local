@@ -21,7 +21,7 @@ $gameRoot = Join-Path $cbjqDir "game"
 # ==================================================
 # 检查汇总
 # ==================================================
-# 必要：CBJQ 目录、游戏结构、Game.exe、PAK 自动修复、补丁同步、MikuSB
+# 必要：GameBin 目录、游戏结构、Game.exe、PAK 自动修复、补丁同步、MikuSB
 # 可选：localization=1、ReShade
 
 function Sync-PakFiles($sourceDir, $targetDir, $label) {
@@ -189,11 +189,11 @@ $injectExe = Join-Path $rootDir "reshade\inject.exe"
 $mikuExe   = Join-Path $rootDir "MikuSB-win-x64\MikuSB.exe"
 
 # ==================================================
-# 检查 CBJQ
+# 检查 GameBin
 # ==================================================
 
 if (!(Test-Path $cbjqDir)) {
-    Fail "缺少 CBJQ 目录：$cbjqDir"
+    Fail "缺少 GameBin 目录：$cbjqDir"
 }
 
 # ==================================================
