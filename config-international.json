@@ -1,0 +1,20 @@
+{
+  "paths": {
+    "gameBinDir": "D:\\Programs\\steam\\steamapps\\common",
+    "gameFolder": "SNOWBREAK",
+    "reshadeDir": "reshade",
+    "mikuExe": "MikuSB-win-x64/MikuSB.exe",
+    "injectExe": "reshade/inject.exe"
+  },
+  "patch": [
+    { "Common_Patch": "hash" }
+  ],
+  "optional": {
+    "game": "off",
+    "localization": "auto",
+    "reshade": "auto"
+  },
+  "launch": {
+    "mikuGameArg": true
+  }
+}

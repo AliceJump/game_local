@@ -1,0 +1,26 @@
+{
+  "paths": {
+    "gameBinDir": "GameBin",
+    "gameFolder": "game",
+    "reshadeDir": "reshade",
+    "mikuExe": "MikuSB-win-x64/MikuSB.exe",
+    "injectExe": "reshade/inject.exe"
+  },
+  "patch": [
+    { "GM_Patch": "hash" },
+    { "AntiHarmonyPatch": "hash" },
+    { "Common_Patch": "hash" }
+  ],
+  "optional": {
+    "game": "on",
+    "localization": "auto",
+    "reshade": "auto"
+  },
+  "launch": {
+    "featureLevel": "ES31",
+    "channelId": "jinshan",
+    "gclid": "CBJQ_setup",
+    "hideGameWindow": true,
+    "mikuGameArg": false
+  }
+}
